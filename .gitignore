@@ -3,6 +3,7 @@ backend/venv/
 backend/__pycache__/
 *.pyc
 backend/.env
+backend/filehub.db
 
 # React
 frontend/node_modules/
@@ -18,3 +19,4 @@ uploads/*
 # OS
 .DS_Store
 Thumbs.db
+Desktop.ini
