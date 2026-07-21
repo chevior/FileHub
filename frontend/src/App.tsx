@@ -26,6 +26,29 @@ const emptyDashboard: DashboardData = {
   files: [], folders: [], metrics: { file_count: 0, used_bytes: 0, favorite_count: 0, trash_count: 0 },
 };
 
+function storedToken() {
+  try {
+    return localStorage.getItem("filehub_token") || "";
+  } catch {
+    return "";
+  }
+}
+
+function storedUser(): User | null {
+  try {
+    const value: unknown = JSON.parse(localStorage.getItem("filehub_user") || "null");
+    if (
+      typeof value === "object" && value !== null &&
+      typeof (value as User).id === "number" &&
+      typeof (value as User).name === "string" &&
+      typeof (value as User).email === "string"
+    ) return value as User;
+  } catch {
+    // Invalid or unavailable browser storage should behave like a signed-out session.
+  }
+  return null;
+}
+
 function errorMessage(error: unknown) {
   const response = (error as AxiosError<{ detail?: string }>).response;
   return response?.data?.detail || "Something went wrong. Please try again.";
@@ -102,10 +125,8 @@ function SharedScreen({ token }: { token: string }) {
 
 function App() {
   const shareToken = new URLSearchParams(window.location.search).get("share");
-  const [token, setToken] = useState(() => localStorage.getItem("filehub_token") || "");
-  const [user, setUser] = useState<User | null>(() => {
-    try { return JSON.parse(localStorage.getItem("filehub_user") || "null"); } catch { return null; }
-  });
+  const [token, setToken] = useState(storedToken);
+  const [user, setUser] = useState<User | null>(storedUser);
   const [data, setData] = useState(emptyDashboard);
   const [view, setView] = useState<View>("files");
   const [folderId, setFolderId] = useState<number | null>(null);
