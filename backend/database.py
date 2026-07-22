@@ -6,11 +6,13 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 DATABASE_PATH = Path(os.getenv("FILEHUB_DATABASE", BASE_DIR / "filehub.db"))
 
+
 def _connect():
     connection = sqlite3.connect(DATABASE_PATH, timeout=30)
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
     return connection
+
 
 @contextmanager
 def database():
@@ -23,6 +25,7 @@ def database():
         raise
     finally:
         connection.close()
+
 
 def initialize_database():
     DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)

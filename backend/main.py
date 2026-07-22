@@ -273,3 +273,9 @@ def download_shared_file(token: str):
     if not path.is_file():
         raise HTTPException(status_code=404, detail="Stored file is missing")
     return FileResponse(path, media_type=row["content_type"], filename=row["name"])
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
