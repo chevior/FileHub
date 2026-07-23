@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Manage your FileHub profile, identity, and workspace snapshot." />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <title>FileHub | Profile</title>
+  </head>
+  <body>
+    <div class="page">
+      <div class="shell">
+        <aside class="sidebar" aria-label="Sidebar navigation">
+          <div class="brand"><span class="brand-badge"><img src="../assets/logo.svg" alt="FileHub logo" width="20" height="20" /></span><span>FileHub</span></div>
+          <button class="btn" type="button">+ New upload</button>
+          <nav class="nav-list">
+            <a href="dashboard.html" class="nav-link" data-page="dashboard"><span class="icon">⌂</span><span>Dashboard</span></a>
+            <a href="files.html" class="nav-link" data-page="files"><span class="icon">▣</span><span>My files</span></a>
+            <a href="shared.html" class="nav-link" data-page="shared"><span class="icon">⇄</span><span>Shared</span></a>
+            <a href="favorites.html" class="nav-link" data-page="favorites"><span class="icon">♥</span><span>Favorites</span></a>
+            <a href="trash.html" class="nav-link" data-page="trash"><span class="icon">🗑</span><span>Trash</span></a>
+            <a href="profile.html" class="nav-link" data-page="profile"><span class="icon">◉</span><span>Profile</span></a>
+            <a href="settings.html" class="nav-link" data-page="settings"><span class="icon">⚙</span><span>Settings</span></a>
+          </nav>
+        </aside>
+
+        <section class="main-panel">
+          <header class="topbar">
+            <div class="topbar-group">
+              <button class="mobile-nav-toggle" type="button" data-sidebar-toggle>☰</button>
+              <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><input type="search" placeholder="Search files and folders" data-search /></div>
+            </div>
+            <div class="topbar-group">
+              <button class="icon-pill" type="button" data-theme-toggle aria-label="Switch theme">☀️</button>
+              <button class="icon-pill" type="button">👤</button>
+            </div>
+          </header>
+
+          <div class="content">
+            <section class="hero">
+              <div class="hero-title">
+                <div class="badge">Profile</div>
+                <h1>Account details</h1>
+                <p class="hero-subtitle">Clear profile management, plan status, and workspace identity in one place.</p>
+              </div>
+            </section>
+
+            <section class="settings-grid">
+              <article class="card" data-filter-card>
+                <div class="card-title">FileHub User</div>
+                <p class="small-text">Premium workspace member</p>
+              </article>
+              <article class="card" data-filter-card>
+                <div class="card-title">hello@filehub.app</div>
+                <p class="small-text">Primary email</p>
+              </article>
+              <article class="card" data-filter-card>
+                <div class="card-title">Plan: Pro</div>
+                <p class="small-text">Workspace access level</p>
+              </article>
+              <article class="card" data-filter-card>
+                <div class="card-title">Security</div>
+                <p class="small-text">2FA enabled · all synced</p>
+              </article>
+            </section>
+          </div>
+        </section>
+      </div>
+    </div>
+    <script src="../js/main.js" defer></script>
+  </body>
+</html>

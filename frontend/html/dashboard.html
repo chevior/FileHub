@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="FileHub dashboard with workspaces, metrics, and quick actions." />
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <title>FileHub | Dashboard</title>
+  </head>
+  <body>
+    <div class="page">
+      <div class="shell">
+        <aside class="sidebar" aria-label="Sidebar navigation">
+          <div class="brand">
+            <span class="brand-badge"><img src="../assets/logo.svg" alt="FileHub logo" width="20" height="20" /></span>
+            <span>FileHub</span>
+          </div>
+
+          <button class="btn" type="button">+ New upload</button>
+
+          <nav class="nav-list">
+            <a href="dashboard.html" class="nav-link" data-page="dashboard"><span class="icon">⌂</span><span>Dashboard</span></a>
+            <a href="files.html" class="nav-link" data-page="files"><span class="icon">▣</span><span>My files</span></a>
+            <a href="shared.html" class="nav-link" data-page="shared"><span class="icon">⇄</span><span>Shared</span></a>
+            <a href="favorites.html" class="nav-link" data-page="favorites"><span class="icon">♥</span><span>Favorites</span></a>
+            <a href="trash.html" class="nav-link" data-page="trash"><span class="icon">🗑</span><span>Trash</span></a>
+            <a href="profile.html" class="nav-link" data-page="profile"><span class="icon">◉</span><span>Profile</span></a>
+            <a href="settings.html" class="nav-link" data-page="settings"><span class="icon">⚙</span><span>Settings</span></a>
+          </nav>
+
+          <article class="card">
+            <div class="card-header">
+              <span class="card-title">Storage</span>
+              <span class="small-text">72%</span>
+            </div>
+            <div class="skeleton-box" style="height: 8px; margin-top: 10px;"></div>
+            <p class="small-text" style="margin-top: 10px;">12.4 GB of 17 GB used</p>
+          </article>
+        </aside>
+
+        <section class="main-panel">
+          <header class="topbar">
+            <div class="topbar-group">
+              <button class="mobile-nav-toggle" type="button" data-sidebar-toggle>☰</button>
+              <div class="search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+                <input type="search" placeholder="Search files and folders" data-search />
+              </div>
+            </div>
+            <div class="topbar-group">
+              <button class="icon-pill" type="button" data-theme-toggle aria-label="Switch theme">☀️</button>
+              <button class="icon-pill" type="button">👤</button>
+            </div>
+          </header>
+
+          <div class="content">
+            <section class="hero">
+              <div class="hero-title">
+                <div class="badge">Workspace</div>
+                <h1>Dashboard</h1>
+                <p class="hero-subtitle">A clean overview of current activity, storage, and recent signal across your workspace.</p>
+              </div>
+            </section>
+
+            <section class="kpi-grid">
+              <article class="kpi-card card" data-filter-card>
+                <div class="kpi-top">
+                  <div>
+                    <div class="small-text">Files synced</div>
+                    <div class="kpi-value">248</div>
+                  </div>
+                  <div class="icon-pill">▣</div>
+                </div>
+                <div class="kpi-detail">+12% this week</div>
+              </article>
+              <article class="kpi-card card" data-filter-card>
+                <div class="kpi-top">
+                  <div>
+                    <div class="small-text">Shared with team</div>
+                    <div class="kpi-value">31</div>
+                  </div>
+                  <div class="icon-pill">⇄</div>
+                </div>
+                <div class="kpi-detail">7 approvals pending</div>
+              </article>
+              <article class="kpi-card card" data-filter-card>
+                <div class="kpi-top">
+                  <div>
+                    <div class="small-text">Active projects</div>
+                    <div class="kpi-value">09</div>
+                  </div>
+                  <div class="icon-pill">◎</div>
+                </div>
+                <div class="kpi-detail">3 updated recently</div>
+              </article>
+            </section>
+
+            <section class="grid-cards" style="margin-top: 18px;">
+              <article class="card" data-filter-card>
+                <div class="card-header">
+                  <div class="card-title">Recent activity</div>
+                  <span class="small-text" data-live-clock>--:--</span>
+                </div>
+                <div class="loading-row" style="margin-top: 12px;">
+                  <div class="skeleton skeleton-title"></div>
+                  <div class="skeleton skeleton-text"></div>
+                  <div class="skeleton skeleton-box"></div>
+                </div>
+              </article>
+
+              <article class="card" data-filter-card>
+                <div class="card-title">Quick overview</div>
+                <div class="loading-row" style="margin-top: 12px;">
+                  <div class="skeleton skeleton-title"></div>
+                  <div class="skeleton skeleton-text"></div>
+                  <div class="skeleton skeleton-box"></div>
+                </div>
+              </article>
+            </section>
+          </div>
+        </section>
+      </div>
+    </div>
+    <script src="../js/main.js" defer></script>
+  </body>
+</html>
