@@ -27,6 +27,10 @@ FileHub/
 │   ├── requirements.txt
 │   └── .env.example
 ├── frontend/
+│   ├── html/
+│   ├── css/
+│   ├── js/
+│   ├── assets/
 │   ├── src/
 │   └── package.json
 └── uploads/
@@ -50,6 +54,10 @@ available at `http://127.0.0.1:8000/docs`.
 
 ### Frontend
 
+You can run either the existing React/Vite app or preview the static HTML/CSS/JS front-end pages.
+
+#### React/Vite frontend
+
 Open a second terminal:
 
 ```powershell
@@ -58,13 +66,26 @@ npm install
 npm run dev
 ```
 
-The frontend runs at `http://localhost:5173`.
+The React frontend runs at `http://localhost:5173`.
 
 To use a different backend URL, create `frontend/.env.local`:
 
 ```text
 VITE_API_URL=http://127.0.0.1:8000
 ```
+
+#### Static HTML/CSS/JS frontend
+
+The repository also includes a production-style static front-end in `frontend/html/`, with shared assets in `frontend/css/`, `frontend/js/`, and `frontend/assets/`.
+
+Preview it locally with:
+
+```powershell
+cd frontend
+python -m http.server 4173
+```
+
+Then open `http://127.0.0.1:4173/html/login.html`.
 
 ## Verification
 
