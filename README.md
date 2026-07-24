@@ -21,24 +21,28 @@ deleting files.
 
 ```text
 FileHub/
-├── backend/
-│   ├── main.py
-│   ├── database.py
-│   ├── requirements.txt
-│   └── .env.example
-├── frontend/
-│   ├── html/
-│   ├── css/
-│   ├── js/
-│   ├── assets/
-│   ├── src/
-│   └── package.json
-└── uploads/
+|-- backend/
+|   |-- main.py
+|   |-- database.py
+|   |-- requirements.txt
+|   `-- .env.example
+|-- frontend/
+|   |-- html/
+|   |-- css/
+|   |-- js/
+|   |-- assets/
+|   |-- src/
+|   `-- package.json
+|-- package.json
+`-- uploads/
 ```
 
 ## Run locally
 
-### Backend
+### Full app from Python
+
+The simplest local run path is `backend/main.py`. It serves the API and, when
+needed, builds the React frontend so `http://127.0.0.1:8000/` opens the app.
 
 ```powershell
 cd backend
@@ -46,27 +50,23 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 Copy-Item .env.example .env
-uvicorn main:app --reload
+python main.py
 ```
 
-The API runs at `http://127.0.0.1:8000`. Interactive API documentation is
-available at `http://127.0.0.1:8000/docs`.
+Open `http://127.0.0.1:8000/` for the app. Interactive API documentation is
+available at `http://127.0.0.1:8000/docs`, and API routes stay under `/api`.
 
-### Frontend
+### Frontend development
 
-You can run either the existing React/Vite app or preview the static HTML/CSS/JS front-end pages.
-
-#### React/Vite frontend
-
-Open a second terminal:
+For live React/Vite development, run npm from the repository root:
 
 ```powershell
-cd frontend
 npm install
 npm run dev
 ```
 
-The React frontend runs at `http://localhost:5173`.
+The React frontend runs at `http://localhost:5173` and talks to the backend at
+`http://127.0.0.1:8000/api`.
 
 To use a different backend URL, create `frontend/.env.local`:
 
@@ -74,9 +74,25 @@ To use a different backend URL, create `frontend/.env.local`:
 VITE_API_URL=http://127.0.0.1:8000
 ```
 
-#### Static HTML/CSS/JS frontend
+Root npm scripts are provided for convenience:
 
-The repository also includes a production-style static front-end in `frontend/html/`, with shared assets in `frontend/css/`, `frontend/js/`, and `frontend/assets/`.
+```powershell
+npm run dev
+npm run build
+npm run lint
+npm run preview
+```
+
+### Login
+
+There are no default credentials. Create an account from the Register page, then
+sign in with that email and password. Passwords must be at least 8 characters.
+
+### Static HTML/CSS/JS frontend
+
+The repository also includes a production-style static front-end in
+`frontend/html/`, with shared assets in `frontend/css/`, `frontend/js/`, and
+`frontend/assets/`.
 
 Preview it locally with:
 
@@ -90,12 +106,16 @@ Then open `http://127.0.0.1:4173/html/login.html`.
 ## Verification
 
 ```powershell
-cd frontend
 npm run lint
 npm run build
-
-cd ..
 python -m py_compile backend/main.py backend/database.py
+```
+
+If lint runs out of memory on Windows, retry with a larger Node heap:
+
+```powershell
+$env:NODE_OPTIONS='--max-old-space-size=4096'
+npm run lint
 ```
 
 ## Production notes
