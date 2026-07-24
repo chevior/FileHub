@@ -1,5 +1,6 @@
 import os
 import secrets
+import subprocess
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Annotated
@@ -290,8 +291,24 @@ def frontend_app(path: str):
         return FileResponse(frontend_index)
     raise HTTPException(status_code=404, detail="Frontend build not found")
 
+def ensure_frontend_build():
+    frontend_dir = FRONTEND_DIST.parent
+    frontend_index = FRONTEND_DIST / "index.html"
+    if frontend_index.is_file():
+        return
+    if not (frontend_dir / "package.json").is_file():
+        print("Frontend package.json not found; API will still run.")
+        return
+    npm_command = "npm.cmd" if os.name == "nt" else "npm"
+    if not (frontend_dir / "node_modules").is_dir():
+        print("Installing frontend dependencies...")
+        subprocess.run([npm_command, "install"], cwd=frontend_dir, check=True)
+    print("Building frontend for http://127.0.0.1:8000/ ...")
+    subprocess.run([npm_command, "run", "build"], cwd=frontend_dir, check=True)
+
 
 if __name__ == "__main__":
     import uvicorn
 
+    ensure_frontend_build()
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
