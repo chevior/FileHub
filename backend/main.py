@@ -10,18 +10,22 @@ from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile, sta
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
 from pydantic import BaseModel, EmailStr, Field
 
 from database import database, initialize_database
 
 BASE_DIR = Path(__file__).resolve().parent
+FRONTEND_DIST = BASE_DIR.parent / "frontend" / "dist"
 UPLOAD_DIR = Path(os.getenv("FILEHUB_UPLOAD_DIR", BASE_DIR.parent / "uploads"))
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 JWT_SECRET = os.getenv("JWT_SECRET", "filehub-local-development-secret-change-me")
 MAX_UPLOAD_BYTES = int(os.getenv("MAX_UPLOAD_BYTES", 100 * 1024 * 1024))
 
 app = FastAPI(title="FileHub API", version="1.0.0")
+if FRONTEND_DIST.is_dir():
+    app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[value.strip() for value in os.getenv(
@@ -85,6 +89,9 @@ def startup():
 
 @app.get("/")
 def home():
+    frontend_index = FRONTEND_DIST / "index.html"
+    if frontend_index.is_file():
+        return FileResponse(frontend_index)
     return {"name": "FileHub API", "status": "online", "docs": "/docs"}
 
 @app.get("/api/health")
@@ -273,6 +280,15 @@ def download_shared_file(token: str):
     if not path.is_file():
         raise HTTPException(status_code=404, detail="Stored file is missing")
     return FileResponse(path, media_type=row["content_type"], filename=row["name"])
+
+@app.get("/{path:path}", include_in_schema=False)
+def frontend_app(path: str):
+    if path.startswith("api/"):
+        raise HTTPException(status_code=404, detail="Not found")
+    frontend_index = FRONTEND_DIST / "index.html"
+    if frontend_index.is_file():
+        return FileResponse(frontend_index)
+    raise HTTPException(status_code=404, detail="Frontend build not found")
 
 
 if __name__ == "__main__":
