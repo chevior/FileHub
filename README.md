@@ -125,3 +125,8 @@ npm run lint
 - Store uploads on durable private storage.
 - Place the API behind HTTPS.
 - PostgreSQL can replace SQLite later without changing the frontend contract.
+
+## Support
+
+If you find this project useful, please ⭐ star the repository.
+It helps others discover it!
