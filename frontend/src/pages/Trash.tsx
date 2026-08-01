@@ -86,15 +86,17 @@ export default function Trash() {
               onDownload={(item) => {
                 void onDownload(item);
               }}
-              onFavorite={() => undefined}
-              onTrash={() => undefined}
-              onRestore={(item) => {
-                void restoreFromTrash(item.id).then(() => loadData());
+              onFavorite={async () => undefined}
+              onTrash={async () => undefined}
+              onRestore={async (item) => {
+                await restoreFromTrash(item.id);
+                await loadData();
               }}
-              onDelete={(item) => {
-                void deleteFilePermanently(item.id).then(() => loadData());
+              onDelete={async (item) => {
+                await deleteFilePermanently(item.id);
+                await loadData();
               }}
-              onShare={() => undefined}
+              onShare={async () => undefined}
             />
           ))
         ) : (

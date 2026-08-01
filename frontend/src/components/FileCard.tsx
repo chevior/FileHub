@@ -1,15 +1,16 @@
 import { FiDownload, FiLink2, FiRotateCcw, FiStar, FiTrash2 } from "react-icons/fi";
 import type { FileItem } from "../types/file";
+import toast from "react-hot-toast";
 
 type FileCardProps = {
 	file: FileItem;
 	view: "files" | "favorites" | "trash";
 	onDownload: (file: FileItem) => void;
-	onFavorite: (file: FileItem) => void;
-	onTrash: (file: FileItem) => void;
-	onRestore: (file: FileItem) => void;
-	onDelete: (file: FileItem) => void;
-	onShare: (file: FileItem) => void;
+	onFavorite: (file: FileItem) => Promise<void>;
+	onTrash: (file: FileItem) => Promise<void>;
+	onRestore: (file: FileItem) => Promise<void>;
+	onDelete: (file: FileItem) => Promise<void>;
+	onShare: (file: FileItem) => Promise<void>;
 };
 
 function formatSize(bytes: number) {
@@ -46,7 +47,14 @@ export default function FileCard({
 				{view !== "trash" ? (
 					<button
 						type="button"
-						onClick={() => onFavorite(file)}
+						onClick={async () => {
+							try {
+								await onFavorite(file);
+								toast.success(file.is_favorite ? "Removed from favorites" : "Added to favorites");
+							} catch {
+								toast.error("Failed to update favorite");
+							}
+						}}
 						className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--soft)] text-[var(--muted)] hover:text-yellow-400"
 						title="Toggle favorite"
 					>
@@ -58,7 +66,10 @@ export default function FileCard({
 			<div className="mt-4 flex flex-wrap gap-2">
 				<button
 					type="button"
-					onClick={() => onDownload(file)}
+					onClick={() => {
+                      onDownload(file);
+                      toast.success("Download started");
+                   }}
 					className="inline-flex items-center gap-2 rounded-xl border border-[var(--stroke)] bg-[var(--soft)] px-3 py-2 text-xs font-semibold text-[var(--text)]"
 				>
 					<FiDownload size={14} /> Download
@@ -68,14 +79,28 @@ export default function FileCard({
 					<>
 						<button
 							type="button"
-							onClick={() => onRestore(file)}
+							onClick={async () => {
+								try {
+									await onRestore(file);
+									toast.success("File restored");
+								} catch {
+									toast.error("Failed to restore file");
+								}
+							}}
 							className="inline-flex items-center gap-2 rounded-xl border border-[var(--stroke)] bg-[var(--soft)] px-3 py-2 text-xs font-semibold text-[var(--text)]"
 						>
 							<FiRotateCcw size={14} /> Restore
 						</button>
 						<button
 							type="button"
-							onClick={() => onDelete(file)}
+							onClick={async () => {
+								try {
+									await onDelete(file);
+									toast.success("File permanently deleted");
+								} catch {
+									toast.error("Failed to delete file");
+								}
+							}}
 							className="inline-flex items-center gap-2 rounded-xl border border-rose-400/30 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-300"
 						>
 							<FiTrash2 size={14} /> Delete
@@ -85,14 +110,28 @@ export default function FileCard({
 					<>
 						<button
 							type="button"
-							onClick={() => onTrash(file)}
+							onClick={async () => {
+								try {
+									await onTrash(file);
+									toast.success("File moved to trash");
+								} catch {
+									toast.error("Failed to move file");
+								}
+							}}
 							className="inline-flex items-center gap-2 rounded-xl border border-[var(--stroke)] bg-[var(--soft)] px-3 py-2 text-xs font-semibold text-[var(--text)]"
 						>
 							<FiTrash2 size={14} /> Trash
 						</button>
 						<button
 							type="button"
-							onClick={() => onShare(file)}
+							onClick={async () => {
+								try {
+									await onShare(file);
+									toast.success("Share link created");
+								} catch {
+									toast.error("Failed to create share link");
+								}
+							}}
 							className="inline-flex items-center gap-2 rounded-xl border border-[var(--stroke)] bg-[var(--soft)] px-3 py-2 text-xs font-semibold text-[var(--text)]"
 						>
 							<FiLink2 size={14} /> Share

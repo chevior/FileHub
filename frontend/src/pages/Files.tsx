@@ -132,17 +132,17 @@ export default function Files() {
                 onDownload={(item) => {
                   void onDownload(item);
                 }}
-                onFavorite={(item) => {
-                  void toggleFavorite(item.id).then(() => loadData());
+                onFavorite={async (item) => {
+                  await toggleFavorite(item.id);
+                  await loadData();
                 }}
-                onTrash={(item) => {
-                  void moveToTrash(item.id).then(() => loadData());
+                onTrash={async (item) => {
+                  await moveToTrash(item.id);
+                  await loadData();
                 }}
-                onRestore={() => undefined}
-                onDelete={() => undefined}
-                onShare={(item) => {
-                  void onShare(item);
-                }}
+                onRestore={async () => undefined}
+                onDelete={async () => undefined}
+                onShare={onShare}
               />
             ))
           ) : (
