@@ -5,7 +5,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Annotated
 from uuid import uuid4
-
+from fastapi import FastAPI
+from pydantic import BaseModel
 import bcrypt
 from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -88,7 +89,12 @@ def owned_file(connection, file_id: int, user_id: int):
 def startup():
     initialize_database()
 
-@app.get("/")
+
+class HomeResponse(BaseModel):
+    message: str
+
+
+@app.get("/", response_model=HomeResponse)
 def home():
     frontend_index = FRONTEND_DIST / "index.html"
     if frontend_index.is_file():

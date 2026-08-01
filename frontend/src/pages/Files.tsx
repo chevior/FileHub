@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import FileCard from "../components/FileCard";
 import StorageCard from "../components/StorageCard";
 import UploadModal from "../components/UploadModal";
@@ -22,7 +22,7 @@ function toMessage(error: unknown) {
   return "Something went wrong.";
 }
 
-export default function Dashboard() {
+export default function Files() {
   const { user, logout } = useAuth();
   const [search, setSearch] = useState("");
   const [uploadOpen, setUploadOpen] = useState(false);
@@ -31,8 +31,6 @@ export default function Dashboard() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [data, setData] = useState<DashboardResponse | null>(null);
-
-  const files = useMemo(() => data?.files.slice(0, 8) ?? [], [data]);
 
   const loadData = async (term = search) => {
     setLoading(true);
@@ -97,8 +95,8 @@ export default function Dashboard() {
   return (
     <>
       <DashboardLayout
-        title="Dashboard"
-        subtitle="See storage and recent files in one place."
+        title="My Files"
+        subtitle="Browse, organize, and share your files."
         search={search}
         onSearchChange={setSearch}
         onUploadClick={() => setUploadOpen(true)}
@@ -125,10 +123,8 @@ export default function Dashboard() {
         <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {loading ? (
             <div className="text-sm text-[var(--muted)]">Loading files...</div>
-          ) : files.length === 0 ? (
-            <div className="text-sm text-[var(--muted)]">No files yet. Use Upload to add one.</div>
-          ) : (
-            files.map((file) => (
+          ) : data?.files.length ? (
+            data.files.map((file) => (
               <FileCard
                 key={file.id}
                 file={file}
@@ -149,6 +145,8 @@ export default function Dashboard() {
                 }}
               />
             ))
+          ) : (
+            <div className="text-sm text-[var(--muted)]">No files found.</div>
           )}
         </div>
       </DashboardLayout>

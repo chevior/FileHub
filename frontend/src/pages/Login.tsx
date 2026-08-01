@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { FiCheckCircle, FiFolder, FiLock, FiShield, FiZap } from "react-icons/fi";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
-import { useAuth } from "../contexts/useAuth";
+import { useAuth } from "../hooks/useAuth";
 
 function errorMessage(error: unknown) {
   if (axios.isAxiosError<{ detail?: string }>(error)) return error.response?.data?.detail ?? "Unable to connect to FileHub.";

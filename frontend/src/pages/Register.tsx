@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { FiCheckCircle, FiFolder, FiUserPlus, FiZap } from "react-icons/fi";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
-import { useAuth } from "../contexts/useAuth";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Register() {
   const { user, loading, register } = useAuth();

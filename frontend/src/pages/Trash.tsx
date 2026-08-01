@@ -1,35 +1,106 @@
-import { FiRefreshCw, FiTrash2 } from "react-icons/fi";
-import AppShell from "../components/AppShell";
-import { GlassCard } from "../components/ui";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import FileCard from "../components/FileCard";
+import { useAuth } from "../hooks/useAuth";
+import DashboardLayout from "../layouts/DashboardLayout";
+import {
+  deleteFilePermanently,
+  downloadFile,
+  getDashboard,
+  restoreFromTrash,
+} from "../services/file.service";
+import type { DashboardResponse, FileItem } from "../types/file";
 
-const deleted = [
-  { name: "Old briefing", deleted: "Removed 4 days ago" },
-  { name: "Archive notes", deleted: "Removed yesterday" },
-  { name: "Draft concepts", deleted: "Removed 2 days ago" },
-];
+function toMessage(error: unknown) {
+  if (axios.isAxiosError<{ detail?: string }>(error)) {
+    return error.response?.data?.detail ?? "Request failed.";
+  }
+  return "Something went wrong.";
+}
 
 export default function Trash() {
+  const { user, logout } = useAuth();
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [data, setData] = useState<DashboardResponse | null>(null);
+
+  const loadData = async (term = search) => {
+    setLoading(true);
+    setError("");
+    try {
+      const response = await getDashboard({ view: "trash", search: term });
+      setData(response.data);
+    } catch (requestError) {
+      setError(toMessage(requestError));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    void loadData("");
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void loadData(search);
+    }, 300);
+    return () => window.clearTimeout(timer);
+  }, [search]);
+
+  const onDownload = async (file: FileItem) => {
+    const response = await downloadFile(file.id);
+    const url = window.URL.createObjectURL(response.data);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = file.name;
+    link.click();
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
-    <AppShell
+    <DashboardLayout
       title="Trash"
-      subtitle="Recover or review deleted items from a focused, low-noise interface."
+      subtitle="Restore or permanently delete files from trash."
+      search={search}
+      onSearchChange={setSearch}
+      userName={user?.name}
+      onLogout={logout}
     >
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {deleted.map((item) => (
-          <GlassCard key={item.name} className="rounded-[24px]">
-            <div className="flex items-center justify-between gap-3">
-              <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[var(--soft)] text-rose-400">
-                <FiTrash2 size={18} />
-              </div>
-              <button type="button" className="inline-flex items-center gap-2 rounded-xl bg-[var(--soft)] px-3 py-2 text-xs font-semibold text-[var(--text)]">
-                <FiRefreshCw size={14} /> Recover
-              </button>
-            </div>
-            <div className="mt-4 text-lg font-semibold text-[var(--text)]">{item.name}</div>
-            <div className="mt-1 text-sm text-[var(--muted)]">{item.deleted}</div>
-          </GlassCard>
-        ))}
-      </section>
-    </AppShell>
+      {error ? (
+        <div className="mb-4 rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+          {error}
+        </div>
+      ) : null}
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {loading ? (
+          <div className="text-sm text-[var(--muted)]">Loading trash...</div>
+        ) : data?.files.length ? (
+          data.files.map((file) => (
+            <FileCard
+              key={file.id}
+              file={file}
+              view="trash"
+              onDownload={(item) => {
+                void onDownload(item);
+              }}
+              onFavorite={() => undefined}
+              onTrash={() => undefined}
+              onRestore={(item) => {
+                void restoreFromTrash(item.id).then(() => loadData());
+              }}
+              onDelete={(item) => {
+                void deleteFilePermanently(item.id).then(() => loadData());
+              }}
+              onShare={() => undefined}
+            />
+          ))
+        ) : (
+          <div className="text-sm text-[var(--muted)]">Trash is empty.</div>
+        )}
+      </div>
+    </DashboardLayout>
   );
 }
