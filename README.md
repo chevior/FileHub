@@ -55,6 +55,7 @@ python main.py
 
 Open `http://127.0.0.1:8000/` for the app. Interactive API documentation is
 available at `http://127.0.0.1:8000/docs`, and API routes stay under `/api`.
+A lightweight health check is available at `http://127.0.0.1:8000/api/health`.
 
 ### Frontend development
 

@@ -103,7 +103,13 @@ def home():
 
 @app.get("/api/health")
 def health():
-    return {"status": "healthy"}
+    return {
+        "status": "healthy",
+        "service": "FileHub API",
+        "version": app.version,
+        "uploads_dir": str(UPLOAD_DIR),
+        "max_upload_bytes": MAX_UPLOAD_BYTES,
+    }
 
 @app.post("/api/auth/register", status_code=201)
 def register(payload: RegisterPayload):
