@@ -107,6 +107,7 @@ def health():
         "status": "healthy",
         "service": "FileHub API",
         "version": app.version,
+        "environment": os.getenv("APP_ENV", "development"),
         "uploads_dir": str(UPLOAD_DIR),
         "max_upload_bytes": MAX_UPLOAD_BYTES,
         "max_upload_mb": MAX_UPLOAD_BYTES // (1024 * 1024),

@@ -56,7 +56,7 @@ python main.py
 Open `http://127.0.0.1:8000/` for the app. Interactive API documentation is
 available at `http://127.0.0.1:8000/docs`, and API routes stay under `/api`.
 A lightweight health check is available at `http://127.0.0.1:8000/api/health`.
-It reports the upload limit in both bytes and megabytes for quick monitoring.
+It reports the environment name, upload limit, and storage path for quick monitoring.
 
 ### Frontend development
 
