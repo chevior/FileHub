@@ -109,6 +109,7 @@ def health():
         "version": app.version,
         "uploads_dir": str(UPLOAD_DIR),
         "max_upload_bytes": MAX_UPLOAD_BYTES,
+        "max_upload_mb": MAX_UPLOAD_BYTES // (1024 * 1024),
     }
 
 @app.post("/api/auth/register", status_code=201)
