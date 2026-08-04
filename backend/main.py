@@ -4,10 +4,11 @@ import subprocess
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Annotated
-from uuid import uuid4
 from fastapi import FastAPI
 from pydantic import BaseModel
 import bcrypt
+
+from file_utils import build_stored_name
 from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -196,7 +197,7 @@ def create_folder(payload: FolderPayload, user=Depends(current_user)):
 @app.post("/api/files/upload", status_code=201)
 async def upload_file(upload: Annotated[UploadFile, File()], folder_id: Annotated[int | None, Form()] = None, user=Depends(current_user)):
     original_name = Path(upload.filename or "untitled").name[:255]
-    stored_name = f"{uuid4().hex}{Path(original_name).suffix.lower()}"
+    stored_name = build_stored_name(original_name)
     target, size = UPLOAD_DIR / stored_name, 0
     if folder_id is not None:
         with database() as connection:
