@@ -4,8 +4,6 @@ import subprocess
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Annotated
-from fastapi import FastAPI
-from pydantic import BaseModel
 import bcrypt
 
 from file_utils import build_stored_name
@@ -15,7 +13,7 @@ from fastapi.responses import FileResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
 
 from database import database, initialize_database
 
@@ -91,11 +89,7 @@ def startup():
     initialize_database()
 
 
-class HomeResponse(BaseModel):
-    message: str
-
-
-@app.get("/", response_model=HomeResponse)
+@app.get("/")
 def home():
     frontend_index = FRONTEND_DIST / "index.html"
     if frontend_index.is_file():
