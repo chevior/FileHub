@@ -26,6 +26,11 @@ class BuildStoredNameTests(unittest.TestCase):
         self.assertTrue(stored_name.startswith("upload-"))
         self.assertTrue(stored_name.endswith(".bin"))
 
+    def test_uses_safe_fallback_for_whitespace_filename(self):
+        stored_name = build_stored_name("   ")
+        self.assertTrue(stored_name.startswith("upload-"))
+        self.assertTrue(stored_name.endswith(".bin"))
+
 
 if __name__ == "__main__":
     unittest.main()
