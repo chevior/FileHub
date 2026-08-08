@@ -7,7 +7,12 @@ def _build_suffix(cleaned_name: str, fallback_extension: str) -> str:
     suffixes = [suffix for suffix in path.suffixes if suffix]
     if suffixes:
         combined = "".join(suffixes[-2:])
-        return combined if len(combined) <= 20 else suffixes[-1]
+        if len(combined) <= 20:
+            return combined
+        last_suffix = suffixes[-1]
+        if len(last_suffix) > 20:
+            return last_suffix[:20]
+        return last_suffix
 
     if cleaned_name.startswith(".") and len(cleaned_name) > 1:
         hidden_suffix = cleaned_name

@@ -1,4 +1,5 @@
 import unittest
+from pathlib import Path
 
 from backend.file_utils import build_stored_name
 
@@ -30,6 +31,11 @@ class BuildStoredNameTests(unittest.TestCase):
         stored_name = build_stored_name("   ")
         self.assertTrue(stored_name.startswith("upload-"))
         self.assertTrue(stored_name.endswith(".bin"))
+
+    def test_truncates_very_long_extension(self):
+        stored_name = build_stored_name("file.verylongextensionname")
+        self.assertTrue(stored_name.endswith(".verylongextensionname"[:20]))
+        self.assertLessEqual(len(Path(stored_name).suffix), 20)
 
 
 if __name__ == "__main__":
