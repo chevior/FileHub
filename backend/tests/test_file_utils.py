@@ -22,6 +22,10 @@ class BuildStoredNameTests(unittest.TestCase):
         stored_name = build_stored_name(".env")
         self.assertTrue(stored_name.endswith(".env"))
 
+    def test_handles_dotfile_without_extension(self):
+        stored_name = build_stored_name(".gitignore")
+        self.assertTrue(stored_name.endswith(".gitignore"))
+
     def test_uses_safe_fallback_for_empty_filename(self):
         stored_name = build_stored_name("")
         self.assertTrue(stored_name.startswith("filehub-upload-"))
