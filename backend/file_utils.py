@@ -22,7 +22,7 @@ def _build_suffix(cleaned_name: str, fallback_extension: str) -> str:
     return fallback_extension
 
 
-def build_stored_name(filename: str | None, fallback_prefix: str = "upload", fallback_extension: str = ".bin") -> str:
+def build_stored_name(filename: str | None, fallback_prefix: str = "filehub-upload", fallback_extension: str = ".bin") -> str:
     """Create a safe stored filename while preserving the original extension when present."""
     if filename is None:
         filename = ""
