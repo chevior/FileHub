@@ -4,13 +4,13 @@ from uuid import uuid4
 
 def _build_suffix(cleaned_name: str, fallback_extension: str) -> str:
     path = Path(cleaned_name)
-    suffixes = [suffix.lower() for suffix in path.suffixes if suffix]
+    suffixes = [suffix for suffix in path.suffixes if suffix]
     if suffixes:
         combined = "".join(suffixes[-2:])
         return combined if len(combined) <= 20 else suffixes[-1]
 
     if cleaned_name.startswith(".") and len(cleaned_name) > 1:
-        hidden_suffix = cleaned_name.lower()
+        hidden_suffix = cleaned_name
         if hidden_suffix[1:].isalnum() and len(hidden_suffix) <= 20:
             return hidden_suffix
 

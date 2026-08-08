@@ -13,6 +13,10 @@ class BuildStoredNameTests(unittest.TestCase):
         stored_name = build_stored_name("archive.tar.gz")
         self.assertTrue(stored_name.endswith(".tar.gz"))
 
+    def test_preserves_extension_case(self):
+        stored_name = build_stored_name("report.PDF")
+        self.assertTrue(stored_name.endswith(".PDF"))
+
     def test_handles_hidden_dotfile_name(self):
         stored_name = build_stored_name(".env")
         self.assertTrue(stored_name.endswith(".env"))
