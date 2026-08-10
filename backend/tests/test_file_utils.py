@@ -41,6 +41,11 @@ class BuildStoredNameTests(unittest.TestCase):
         self.assertTrue(stored_name.endswith(".verylongextensionname"[:20]))
         self.assertLessEqual(len(Path(stored_name).suffix), 20)
 
+    def test_none_filename_uses_fallback(self):
+        stored_name = build_stored_name(None)
+        self.assertTrue(stored_name.startswith("filehub-upload-"))
+        self.assertTrue(stored_name.endswith(".bin"))
+
 
 if __name__ == "__main__":
     unittest.main()
