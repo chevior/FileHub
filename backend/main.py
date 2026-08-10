@@ -113,6 +113,11 @@ def health():
         "max_upload_mb": MAX_UPLOAD_BYTES // (1024 * 1024),
     }
 
+
+@app.get("/api/ping")
+def ping():
+    return {"pong": True}
+
 @app.post("/api/auth/register", status_code=201)
 def register(payload: RegisterPayload):
     name, email = payload.name.strip(), payload.email.lower().strip()
