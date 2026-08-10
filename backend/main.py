@@ -13,7 +13,7 @@ from fastapi.responses import FileResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 import logging
 
 from database import database, initialize_database
@@ -44,7 +44,7 @@ security = HTTPBearer(auto_error=False)
 
 class RegisterPayload(BaseModel):
     name: str = Field(min_length=2, max_length=80)
-    email: str = Field(min_length=5, max_length=254)
+    email: EmailStr
     password: str = Field(min_length=8, max_length=128)
 
 class LoginPayload(BaseModel):
