@@ -14,6 +14,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
 from pydantic import BaseModel, Field
+import logging
 
 from database import database, initialize_database
 
@@ -25,6 +26,9 @@ JWT_SECRET = os.getenv("JWT_SECRET", "filehub-local-development-secret-change-me
 MAX_UPLOAD_BYTES = int(os.getenv("MAX_UPLOAD_BYTES", 100 * 1024 * 1024))
 
 app = FastAPI(title="FileHub API", version="1.0.0")
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
+logging.basicConfig(level=LOG_LEVEL)
+logger = logging.getLogger("filehub")
 if FRONTEND_DIST.is_dir():
     app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets")
 app.add_middleware(
@@ -87,6 +91,7 @@ def owned_file(connection, file_id: int, user_id: int):
 @app.on_event("startup")
 def startup():
     initialize_database()
+    logger.info("FileHub startup complete; database initialized")
 
 
 @app.get("/")
@@ -191,6 +196,7 @@ def create_folder(payload: FolderPayload, user=Depends(current_user)):
 @app.post("/api/files/upload", status_code=201)
 async def upload_file(upload: Annotated[UploadFile, File()], folder_id: Annotated[int | None, Form()] = None, user=Depends(current_user)):
     original_name = Path(upload.filename or "untitled").name[:255]
+    logger.info("Uploading file for user=%s name=%s", user.get("id"), original_name)
     stored_name = build_stored_name(original_name)
     target, size = UPLOAD_DIR / stored_name, 0
     if folder_id is not None:
@@ -205,6 +211,7 @@ async def upload_file(upload: Annotated[UploadFile, File()], folder_id: Annotate
                 if size > MAX_UPLOAD_BYTES:
                     raise HTTPException(status_code=413, detail="File exceeds the 100 MB upload limit")
                 output.write(chunk)
+        logger.info("Wrote %d bytes to %s", size, target)
         with database() as connection:
             cursor = connection.execute("""
                 INSERT INTO files (user_id, folder_id, name, stored_name, content_type, size)
